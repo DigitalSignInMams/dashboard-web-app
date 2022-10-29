@@ -1,0 +1,6 @@
+Event Object:
+_id: ObjectId (String?)
+eventName: String
+startTime: String (DateTime)
+endTime: String (DateTime)
+location: String
