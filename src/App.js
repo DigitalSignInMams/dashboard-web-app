@@ -4,9 +4,10 @@ import './App.css';
 import "react-datetime/css/react-datetime.css";
 
 import CalendarView from "./components/CalendarView/CalendarView";
-import Header from './components/Header/Header';
+import Header from './components/header/Header';
 import Login from './components/Pages/Login/Login';
 import DashboardPage from './components/Pages/Dashboard/Dashboard';
+import LogoutPage from './components/Pages/Login/LogoutPage';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import Counter from "./components/Counter/Counter";
 
@@ -17,7 +18,10 @@ function App() {
       <BrowserRouter>
         <Routes>
             <Route path="/" element={<Login />} />
+            
             <Route path="dashboard" element={<DashboardPage/>}/>
+            <Route path="logout" element={<LogoutPage/>} />
+
       
         </Routes>
       </BrowserRouter>

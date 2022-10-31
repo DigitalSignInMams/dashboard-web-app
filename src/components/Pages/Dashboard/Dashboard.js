@@ -75,120 +75,19 @@ import {
 
         return;
       }
-      if (!user) navigate("/login");
+      if (!user) navigate("/");
     }, [user, loading, navigate]);
   
     return (
       <>
        
         <section style={{ padding: "50px" }}>
-          <Form onSubmit={e => e.preventDefault()}>
-            <Form.Group className="mb-3 w-25">
-              <Form.Label>Title</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter blog title"
-                value={currentEventName}
-                onChange={(e) => {
-                  setCurrentEventName(e.target.value);
-                }}
-              />
-            </Form.Group>
-  
-            <Form.Group className="mb-3 w-25">
-              <Form.Label>Location (optional)</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter blog title"
-                value={currentEventName}
-                onChange={(e) => {
-                  setCurrentEventName(e.target.value);
-                }}
-              />
-            </Form.Group>
-  
-            <Row>
-              <Col>
-                <Form.Group className="mb-3">
-                  <Form.Label>Post Time</Form.Label>
-                  <Datetime
-                    value={currentEndDateTime}
-                    timeConstraints={{ minutes: { step: 5 } }}
-                    onChange={setCurrentEndDateTime}
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
-  
-            <Form.Group className="mb-3">
-              {/* implement this and submit to server*/}
-              <Form.Label>Blog File Storage</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter file location"
-                value={currentFileName}
-                onChange={(e) => {
-                  setCurrentFileName(e.target.value);
-                }}
-              />
-            </Form.Group>
-  
- 
-  
-            <Form.Group className="mb-3">
-              {/* implement this and submit to server*/}
-              <Form.Label>Cover Image URL</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter location"
-                value={currentLocationName}
-                onChange={(e) => {
-                  setCurrentLocationName(e.target.value);
-                }}
-              />
-            </Form.Group>
-  
-            <Form.Group className="mb-3">
-              {/* implement this and submit to server*/}
-  
-             
-              
-  
-  
-              <Form.Label>HTML insert</Form.Label>
-  
-
-    
-
-  
-            {/* <pre>
-              {JSON.stringify(
-                convertToRaw(this.state.contentState.getCurrentContent()),
-                null,
-                "  "
-              )}
-            </pre>
-   */}
-  
-  
-  
-  
-  
-        
-            
-            </Form.Group>
-  
-            <Button onClick={e => alert(this.state.contentState.getCurrentContent)
-              } variant="primary" type="submit">
-              Post
-            </Button>
-          </Form>
-  
-          <br />
+          
   
           <button
             className="btn pr-3 btn-outline-danger"
             onClick={() => {
+            
               navigate("/logout");
             }}
           >
