@@ -10,15 +10,16 @@ import {
   import React, { useEffect, useState } from "react";
   import { useAuthState } from "react-firebase-hooks/auth";
   import { useNavigate } from "react-router";
-
   import "react-datetime/css/react-datetime.css";
-
+  import 'antd/dist/antd.css';
   
+  import { Alert, Calendar } from 'antd';
+import moment from 'moment';
+
 
   
   import Button from "react-bootstrap/Button";
   import Modal from "react-bootstrap/Modal";
-  import moment from "moment";
   import Form from "react-bootstrap/Form";
   import Row from "react-bootstrap/Row";
   import Col from "react-bootstrap/Col";
@@ -47,6 +48,17 @@ import {
     let [currentEndDateTime, setCurrentEndDateTime] = useState(
       MomentUtils.roundUp(moment(new Date()), "hour").add(1, "hour")
     );
+
+    const [value, setValue] = useState(() => moment('2017-01-25'));
+    const [selectedValue, setSelectedValue] = useState(() => moment('2017-01-25'));
+    const onSelect = (newValue) => {
+      setValue(newValue);
+      setSelectedValue(newValue);
+    };
+    const onPanelChange = (newValue) => {
+      setValue(newValue);
+    };
+
   
     // let _contentState = ContentState.createFromText('Sample content state');
     // const raw = convertToRaw(_contentState)
@@ -70,6 +82,7 @@ import {
     // }, []);
   
     useEffect(() => {
+     
       if (loading) {
         // maybe trigger a loading screen
 
@@ -82,7 +95,10 @@ import {
       <>
        
         <section style={{ padding: "50px" }}>
-          
+        <div>
+        <Alert message={`You selected date: ${selectedValue?.format('YYYY-MM-DD')}`} />
+      <Calendar value={value} onSelect={onSelect} onPanelChange={onPanelChange} />
+    </div>
   
           <button
             className="btn pr-3 btn-outline-danger"
