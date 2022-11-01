@@ -10,6 +10,8 @@ import DashboardPage from './components/Pages/Dashboard/Dashboard';
 import LogoutPage from './components/Pages/Login/LogoutPage';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import Counter from "./components/Counter/Counter";
+import StudentReport from './components/Pages/StudentReports/StudentReports';
+import DateTemplate from './components/Pages/Dashboard/DateTemplate/DateTemplate';
 
 function App() {
   return (
@@ -20,7 +22,10 @@ function App() {
             <Route path="/" element={<Login />} />
             
             <Route path="dashboard" element={<DashboardPage/>}/>
+            <Route path="dashboard/:date" element={<DateTemplate/>}/>
+            <Route path="studentReports" element={<StudentReport/>} />
             <Route path="logout" element={<LogoutPage/>} />
+
 
       
         </Routes>

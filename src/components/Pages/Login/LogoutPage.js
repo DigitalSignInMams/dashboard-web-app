@@ -9,10 +9,11 @@ function LogoutPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        alert("logout");
+        
         logout();
 
         navigate("/dashboard");
+        window.location.reload(true);
     },[navigate]);
 
     return (

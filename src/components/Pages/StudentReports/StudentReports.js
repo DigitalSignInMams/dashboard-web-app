@@ -1,4 +1,3 @@
-
 // auth
 import {
     auth,
@@ -16,7 +15,7 @@ import {
   import { Alert, Calendar } from 'antd';
 import moment from 'moment';
 import Card from 'react-bootstrap/Card';
-
+import { Space, Table, Tag } from 'antd';
   
   import Button from "react-bootstrap/Button";
   import Modal from "react-bootstrap/Modal";
@@ -26,43 +25,38 @@ import Card from 'react-bootstrap/Card';
   import Datetime from "react-datetime";
   import MomentUtils from "../../../utils/MomentUtils";
   
-  function DashboardPage() {
+  function StudentReport() {
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
   
- 
-  
-  
-    let [currentEventName, setCurrentEventName] = useState("");
-  
-    let [currentFileName, setCurrentFileName] = useState("");
-  
-    let [currentLocationName, setCurrentLocationName] = useState("");
-  
-    let [currentKeepEvent, setCurrentKeepEvent] = useState(false);
-  
-    let [currentStartDateTime, setCurrentStartDateTime] = useState(
-      MomentUtils.roundUp(moment(new Date()), "hour")
-    );
-  
-    let [currentEndDateTime, setCurrentEndDateTime] = useState(
-      MomentUtils.roundUp(moment(new Date()), "hour").add(1, "hour")
-    );
 
-    const [value, setValue] = useState(() => moment());
-    const [selectedValue, setSelectedValue] = useState(() => moment());
-    const onSelect = (newValue) => {
-      alert(moment(newValue).valueOf())
-    
-      navigate("/dashboard/" + newValue.unix())
-      
-      setValue(newValue);
-      setSelectedValue(newValue);
-    };
-    const onPanelChange = (newValue) => {
-      setValue(newValue);
-    };
-
+    const { Column, ColumnGroup } = Table;
+    const data = [
+      {
+        key: '1',
+        firstName: 'John',
+        lastName: 'Brown',
+        age: 32,
+        address: 'New York No. 1 Lake Park',
+        tags: ['nice', 'developer'],
+      },
+      {
+        key: '2',
+        firstName: 'Jim',
+        lastName: 'Green',
+        age: 42,
+        address: 'London No. 1 Lake Park',
+        tags: ['loser'],
+      },
+      {
+        key: '3',
+        firstName: 'Joe',
+        lastName: 'Black',
+        age: 32,
+        address: 'Sidney No. 1 Lake Park',
+        tags: ['cool', 'teacher'],
+      },
+    ];
   
     // let _contentState = ContentState.createFromText('Sample content state');
     // const raw = convertToRaw(_contentState)
@@ -96,14 +90,11 @@ import Card from 'react-bootstrap/Card';
     }, [user, loading, navigate]);
   
     return (
-      <>
-       
         <section style={{ padding: "50px" }}>
         <div>
-        <h2>Calendar View</h2>
+        <h2>Student Reports</h2>
         <br></br>
-        <Alert message={`You selected date: ${selectedValue?.format('YYYY-MM-DD')}`} />
-      <Calendar value={value} onSelect={onSelect} onPanelChange={onPanelChange} />
+       
     </div>
   
           <button
@@ -116,9 +107,8 @@ import Card from 'react-bootstrap/Card';
             Logout
           </button>
         </section>
-      </>
     );
   }
   
-  export default DashboardPage;
+  export default StudentReport;
   

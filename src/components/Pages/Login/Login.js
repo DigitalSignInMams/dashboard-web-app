@@ -20,7 +20,10 @@ function Login() {
       // maybe trigger a loading screen
       return;
     }
-    if (user) navigate("/dashboard");
+    if (user) {
+      navigate("/dashboard");
+      window.location.reload(true);
+    }
   }, [user, loading]);
   const onFinish = (values) => {
 

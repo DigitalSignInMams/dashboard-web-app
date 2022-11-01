@@ -20,7 +20,13 @@ import "./Header.css";
 
 function Header(props) {
 
+    let [currentTabName, setCurrentTabName] = useState("");
 
+    useEffect(() => {
+        if(window.location.pathname == "/") {
+            setCurrentTabName("none")
+        }
+      }, []);
 
     return (
         <Navbar bg="danger" variant="dark">
@@ -34,14 +40,14 @@ function Header(props) {
               alt="React Bootstrap logo"
             />
           </Navbar.Brand>
-          <Navbar.Brand href="#home">Mass Accademy Attendance Portal</Navbar.Brand>
+          <Navbar.Brand href="#home">Mass Academy Attendance Portal</Navbar.Brand>
   
-          <Nav className={window.location.pathname == "/" ? "none me-auto" : "me-auto"}>
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#features">Student Reports</Nav.Link>
+          <Nav className={currentTabName + " me-auto"}>
+            <Nav.Link href="/dashboard">Home</Nav.Link>
+            <Nav.Link href="/studentReports">Student Reports</Nav.Link>
           </Nav>
           
-          <Form className={window.location.pathname == "/" ? "none d-flex" : "d-flex "}>
+          <Form className={currentTabName + " d-flex"}>
             <Form.Control
               type="search"
               placeholder="Search"
