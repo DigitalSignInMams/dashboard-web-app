@@ -20,12 +20,7 @@ import Card from 'react-bootstrap/Card';
 import { Space, Table, Tag } from 'antd';
   
   import Button from "react-bootstrap/Button";
-  import Modal from "react-bootstrap/Modal";
-  import Form from "react-bootstrap/Form";
-  import Row from "react-bootstrap/Row";
-  import Col from "react-bootstrap/Col";
-  import Datetime from "react-datetime";
-  import MomentUtils from "../../../utils/MomentUtils";
+  import Header from "../../header/Header";
   
   function StudentReport() {
     const [user, loading, error] = useAuthState(auth);
@@ -95,6 +90,8 @@ const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender
     }, [user, loading, navigate]);
   
     return (
+      <>
+      <Header/>
         <section style={{ padding: "50px" }}>
         <div>
         <h2>Student Reports</h2>
@@ -123,16 +120,8 @@ const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender
       )}
     />
   
-          <button
-            className="btn pr-3 btn-outline-danger"
-            onClick={() => {
-            
-              navigate("/logout");
-            }}
-          >
-            Logout
-          </button>
-        </section>
+          
+        </section></>
     );
   }
   

@@ -56,6 +56,9 @@ function Header(props) {
             />
             <Button variant="dark">Search</Button>
           </Form>
+          <Button className={currentTabName + " mx-2"} variant="dark" href="/logout">
+            Logout
+          </Button>
          
         </Container>
       </Navbar>

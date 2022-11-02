@@ -7,14 +7,19 @@ import { logout } from "../../../Firebase";
 function LogoutPage() {
     
     const navigate = useNavigate();
+    logout();
 
     useEffect(() => {
-        
+      
         logout();
+        navigate("/");
+        
+        
 
         
-        window.location.reload(true);
-        navigate("/");
+     
+        
+    
     },[navigate]);
 
     return (

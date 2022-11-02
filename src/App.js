@@ -16,7 +16,7 @@ import DateTemplate from './components/Pages/Dashboard/DateTemplate/DateTemplate
 function App() {
   return (
     <>
-      <Header/>
+      
       <BrowserRouter>
         <Routes>
             <Route path="/" element={<Login />} />

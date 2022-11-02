@@ -5,6 +5,7 @@ import { auth, logInWithEmailAndPassword, signInWithGoogle } from "../../../Fire
 import { useAuthState } from "react-firebase-hooks/auth";
 import "./Login.css";
 import { Button, Checkbox, Form, Input } from 'antd';
+import Header from "../../header/Header";
 
 // /Users/taruneswar/Documents/Front-end Web Development/signInConsoleMAMS/src/components/Pages/Login/Login.js
 // /Users/taruneswar/Documents/Front-end Web Development/signInConsoleMAMS/images/download.jpg
@@ -14,10 +15,16 @@ function Login() {
   const [password, setPassword] = useState("");
   const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
+
+
   useEffect(() => {
-  
+   // window.location.reload(true);
+  }, []);
+  useEffect(() => {
+
     if (loading) {
       // maybe trigger a loading screen
+      
       return;
     }
     if (user) {
@@ -36,6 +43,7 @@ function Login() {
   
   return (
     <>
+    <Header/>
     <div style={{ backgroundColor: "rgba(0, 0, 0, 0.5)", background: `url(${pageImage}) no-repeat scroll center center`, backgroundSize: 'cover', }}>
     <div className="login">
       <div className="login__container">

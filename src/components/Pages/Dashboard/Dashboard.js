@@ -18,12 +18,7 @@ import moment from 'moment';
 import Card from 'react-bootstrap/Card';
 
   
-  import Button from "react-bootstrap/Button";
-  import Modal from "react-bootstrap/Modal";
-  import Form from "react-bootstrap/Form";
-  import Row from "react-bootstrap/Row";
-  import Col from "react-bootstrap/Col";
-  import Datetime from "react-datetime";
+  import Header from "../../header/Header";
   import MomentUtils from "../../../utils/MomentUtils";
   
   function DashboardPage() {
@@ -52,7 +47,7 @@ import Card from 'react-bootstrap/Card';
     const [value, setValue] = useState(() => moment());
     const [selectedValue, setSelectedValue] = useState(() => moment());
     const onSelect = (newValue) => {
-      alert(moment(newValue).valueOf())
+      alert(moment(newValue))
     
       navigate("/dashboard/" + newValue.unix())
       
@@ -97,7 +92,7 @@ import Card from 'react-bootstrap/Card';
   
     return (
       <>
-       
+       <Header/>
         <section style={{ padding: "50px" }}>
         <div>
         <h2>Calendar View</h2>

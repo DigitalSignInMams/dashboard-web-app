@@ -17,7 +17,7 @@ import {
 import moment from 'moment';
 import Card from 'react-bootstrap/Card';
 import { Space, Table, Tag } from 'antd';
-
+import Header from "../../../header/Header";
   
   function DateTemplate() {
     const [user, loading, error] = useAuthState(auth);
@@ -86,6 +86,8 @@ import { Space, Table, Tag } from 'antd';
     }, [user, loading, navigate]);
   
     return (
+      <>
+      <Header/>
         <div className="px-5 pt-2">
 
         <Card.Title className="pt-3 pb-3">{moment.unix(params.date).format("MM/DD/YYYY")}</Card.Title>
@@ -129,7 +131,7 @@ import { Space, Table, Tag } from 'antd';
     
       
       </Table>
-      </div>
+      </div></>
     );
   }
   
