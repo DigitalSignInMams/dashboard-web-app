@@ -12,8 +12,9 @@ function LogoutPage() {
         
         logout();
 
-        navigate("/dashboard");
+        
         window.location.reload(true);
+        navigate("/");
     },[navigate]);
 
     return (

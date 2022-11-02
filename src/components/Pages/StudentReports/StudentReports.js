@@ -6,12 +6,14 @@ import {
   } from "../../../Firebase";
   
 
-  import React, { useEffect, useState } from "react";
+
   import { useAuthState } from "react-firebase-hooks/auth";
   import { useNavigate } from "react-router";
   import "react-datetime/css/react-datetime.css";
   import 'antd/dist/antd.css';
-  
+  import { Avatar, List, Skeleton } from 'antd';
+import React, { useEffect, useState } from 'react';
+
   import { Alert, Calendar } from 'antd';
 import moment from 'moment';
 import Card from 'react-bootstrap/Card';
@@ -28,56 +30,59 @@ import { Space, Table, Tag } from 'antd';
   function StudentReport() {
     const [user, loading, error] = useAuthState(auth);
     const navigate = useNavigate();
-  
+    const [initLoading, setInitLoading] = useState(true);
+    const [loadingSet, setLoading] = useState(false);
+    const [data, setData] = useState([]);
+    const [list, setList] = useState([]);
+    const count = 50;
+const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat,picture&noinfo`;
+    useEffect(() => {
+      fetch(fakeDataUrl)
+        .then((res) => res.json())
+        .then((res) => {
+          setInitLoading(false);
+          setData(res.results);
+          setList(res.results);
+        });
+    }, []);
+    const onLoadMore = () => {
+      setLoading(true);
+      setList(
+        data.concat(
+          [...new Array(count)].map(() => ({
+            loadingSet: true,
+            name: {},
+            picture: {},
+          })),
+        ),
+      );
+      fetch(fakeDataUrl)
+        .then((res) => res.json())
+        .then((res) => {
+          const newData = data.concat(res.results);
+          setData(newData);
+          setList(newData);
+          setLoading(false);
+          // Resetting window's offsetTop so as to display react-virtualized demo underfloor.
+          // In real scene, you can using public method of react-virtualized:
+          // https://stackoverflow.com/questions/46700726/how-to-use-public-method-updateposition-of-react-virtualized
+          window.dispatchEvent(new Event('resize'));
+        });
+    };
+    const loadMore =
+      !initLoading && !loadingSet ? (
+        <div
+          style={{
+            textAlign: 'center',
+            marginTop: 12,
+            height: 32,
+            lineHeight: '32px',
+          }}
+        >
+          <Button onClick={onLoadMore}>loading more</Button>
+        </div>
+      ) : null;
 
-    const { Column, ColumnGroup } = Table;
-    const data = [
-      {
-        key: '1',
-        firstName: 'John',
-        lastName: 'Brown',
-        age: 32,
-        address: 'New York No. 1 Lake Park',
-        tags: ['nice', 'developer'],
-      },
-      {
-        key: '2',
-        firstName: 'Jim',
-        lastName: 'Green',
-        age: 42,
-        address: 'London No. 1 Lake Park',
-        tags: ['loser'],
-      },
-      {
-        key: '3',
-        firstName: 'Joe',
-        lastName: 'Black',
-        age: 32,
-        address: 'Sidney No. 1 Lake Park',
-        tags: ['cool', 'teacher'],
-      },
-    ];
-  
-    // let _contentState = ContentState.createFromText('Sample content state');
-    // const raw = convertToRaw(_contentState)
-    // const [contentState, setContentState] = useState(raw)
-  
-  
-
- 
-  
-    // content to html
-    // input html
-  
-    // useEffect(() => {
-    //   listAll(imagesListRef).then((response) => {
-    //     response.items.forEach((item) => {
-    //       getDownloadURL(item).then((url) => {
-    //         setImageUrls((prev) => [...prev, url]);
-    //       });
-    //     });
-    //   });
-    // }, []);
   
     useEffect(() => {
      
@@ -96,6 +101,27 @@ import { Space, Table, Tag } from 'antd';
         <br></br>
        
     </div>
+    <List
+      className="demo-loadmore-list"
+      loading={initLoading}
+      itemLayout="horizontal"
+      loadMore={loadMore}
+      dataSource={list}
+      renderItem={(item) => (
+        <List.Item
+          actions={[<a key="list-loadmore-edit">View Record</a>]}
+        >
+          <Skeleton avatar title={false} loading={item.loading} active>
+            <List.Item.Meta
+              avatar={<Avatar src={item.picture.large} />}
+              title={<a href="https://ant.design">{item.name?.last}</a>}
+              description=""
+            />
+            <div>11th</div>
+          </Skeleton>
+        </List.Item>
+      )}
+    />
   
           <button
             className="btn pr-3 btn-outline-danger"
