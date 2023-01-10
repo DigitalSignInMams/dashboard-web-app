@@ -29,7 +29,7 @@ function Header(props) {
       }, []);
 
     return (
-        <Navbar bg="danger" variant="dark">
+        <Navbar className="color-nav" variant="dark">
         <Container className="maxwidth-none">
             <Navbar.Brand href="#home">
             <img
@@ -43,19 +43,12 @@ function Header(props) {
           <Navbar.Brand href="#home">Mass Academy Attendance Portal</Navbar.Brand>
   
           <Nav className={currentTabName + " me-auto"}>
-            <Nav.Link href="/dashboard">Home</Nav.Link>
+            <Nav.Link href={"/calendar/" + moment().unix()}>Home</Nav.Link>
+            <Nav.Link href="/calendar">Calendar</Nav.Link>
             <Nav.Link href="/studentReports">Student Reports</Nav.Link>
+            <Nav.Link href="/settings">Settings</Nav.Link>
           </Nav>
-          
-          <Form className={currentTabName + " d-flex"}>
-            <Form.Control
-              type="search"
-              placeholder="Search"
-              className="me-2"
-              aria-label="Search"
-            />
-            <Button variant="dark">Search</Button>
-          </Form>
+ 
           <Button className={currentTabName + " mx-2"} variant="dark" href="/logout">
             Logout
           </Button>

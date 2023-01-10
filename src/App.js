@@ -10,8 +10,8 @@ import DashboardPage from './components/Pages/Dashboard/Dashboard';
 import LogoutPage from './components/Pages/Login/LogoutPage';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import Counter from "./components/Counter/Counter";
-import StudentReport from './components/Pages/StudentReports/StudentReports';
 import DateTemplate from './components/Pages/Dashboard/DateTemplate/DateTemplate';
+import SettingsPage from './components/Pages/Settings/Settings';
 
 function App() {
   return (
@@ -21,9 +21,9 @@ function App() {
         <Routes>
             <Route path="/" element={<Login />} />
             
-            <Route path="dashboard" element={<DashboardPage/>}/>
-            <Route path="dashboard/:date" element={<DateTemplate/>}/>
-            <Route path="studentReports" element={<StudentReport/>} />
+            <Route path="calendar" element={<DashboardPage/>}/>
+            <Route path="calendar/:date" element={<DateTemplate/>}/>
+            <Route path="settings" element={<SettingsPage/>} />
             <Route path="logout" element={<LogoutPage/>} />
 
 

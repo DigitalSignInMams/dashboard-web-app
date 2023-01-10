@@ -46,16 +46,18 @@ import Card from 'react-bootstrap/Card';
 
     const [value, setValue] = useState(() => moment());
     const [selectedValue, setSelectedValue] = useState(() => moment());
-    const onSelect = (newValue) => {
-      alert(moment(newValue))
+    const onSelect = () => {
     
-      navigate("/dashboard/" + newValue.unix())
+    
+  
+      navigate("/calendar/" + value.unix())
+     
       
-      setValue(newValue);
-      setSelectedValue(newValue);
     };
     const onPanelChange = (newValue) => {
       setValue(newValue);
+      setSelectedValue(newValue);
+      
     };
 
   
@@ -97,8 +99,12 @@ import Card from 'react-bootstrap/Card';
         <div>
         <h2>Calendar View</h2>
         <br></br>
-        <Alert message={`You selected date: ${selectedValue?.format('YYYY-MM-DD')}`} />
-      <Calendar value={value} onSelect={onSelect} onPanelChange={onPanelChange} />
+       
+      <Calendar value={value} onPanelChange={onPanelChange} onSelect={onPanelChange}/>
+      <button className="btn pr-3 btn-outline-info" onClick={() => {
+            
+            onSelect();
+          }}>Go to date</button>
     </div>
   
           <button
@@ -108,7 +114,7 @@ import Card from 'react-bootstrap/Card';
               navigate("/logout");
             }}
           >
-            Logout
+            Logout from portal
           </button>
         </section>
       </>

@@ -6,6 +6,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import "./Login.css";
 import { Button, Checkbox, Form, Input } from 'antd';
 import Header from "../../header/Header";
+import moment from "moment";
 
 // /Users/taruneswar/Documents/Front-end Web Development/signInConsoleMAMS/src/components/Pages/Login/Login.js
 // /Users/taruneswar/Documents/Front-end Web Development/signInConsoleMAMS/images/download.jpg
@@ -28,7 +29,7 @@ function Login() {
       return;
     }
     if (user) {
-      navigate("/dashboard");
+      navigate("/calendar/" + moment().unix());
       window.location.reload(true);
     }
   }, [user, loading]);

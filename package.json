@@ -11,6 +11,7 @@
     "body-parser": "^1.20.0",
     "bootstrap": "^5.2.0",
     "firebase": "^9.9.3",
+    "moment": "^2.29.4",
     "react": "^17.0.2",
     "react-bootstrap": "^2.1.2",
     "react-datetime": "^3.1.1",

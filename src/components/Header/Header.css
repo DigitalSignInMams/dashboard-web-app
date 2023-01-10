@@ -1,3 +1,7 @@
 .none {
     visibility: hidden;
 }
+
+.color-nav {
+    background-color: #7E202A;
+}
