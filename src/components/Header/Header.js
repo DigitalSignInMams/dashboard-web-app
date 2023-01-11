@@ -45,7 +45,6 @@ function Header(props) {
           <Nav className={currentTabName + " me-auto"}>
             <Nav.Link href={"/calendar/" + moment().unix()}>Home</Nav.Link>
             <Nav.Link href="/calendar">Calendar</Nav.Link>
-            <Nav.Link href="/studentReports">Student Reports</Nav.Link>
             <Nav.Link href="/settings">Settings</Nav.Link>
           </Nav>
  

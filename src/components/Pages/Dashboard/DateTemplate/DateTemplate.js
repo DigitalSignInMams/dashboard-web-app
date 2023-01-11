@@ -14,10 +14,11 @@ import {
   import 'antd/dist/antd.css';
   import { useLocation, useParams } from "react-router";
   import { Alert, Calendar } from 'antd';
-import moment from 'moment';
+import moment, { suppressDeprecationWarnings } from 'moment';
 import Card from 'react-bootstrap/Card';
 import { Space, Table, Tag } from 'antd';
 import Header from "../../../header/Header";
+import { Tabs, ConfigProvider} from 'antd';
 import RequestUtils from "../../../../utils/RequestUtils";
 
 
@@ -35,6 +36,8 @@ import RequestUtils from "../../../../utils/RequestUtils";
 
     let [studentSignIns, setStudentSignIns] = useState([]);
 
+    let [warningObj, setWarningObj] = useState([]);
+
 
     // pull data from db later
     
@@ -42,31 +45,18 @@ import RequestUtils from "../../../../utils/RequestUtils";
     const data = [
       {
         key: '1',
-        firstName: 'John',
-        lastName: 'Brown',
-        locker: 32,
-        report: 'New York No. 1 Lake Park',
-        tags: ['Absent'],
-      },
-      {
-        key: '2',
-        firstName: 'Jim',
-        lastName: 'Green',
-        locker: 42,
-        report: 'London No. 1 Lake Park',
-        tags: ['present'],
-      },
-      {
-        key: '3',
-        firstName: 'Joe',
-        lastName: 'Black',
-        locker: 32,
-        report: 'Sidney No. 1 Lake Park',
-        tags: ['present'],
-      },
+        firstName: 'Loading...',
+        lastName: 'Loading...',
+        locker: 0,
+        report: 'Loading...',
+        tags: ['Loading...'],
+      }
     ];
+    
 
-   
+    
+
+   console.log(data)
     
   
     // let _contentState = ContentState.createFromText('Sample content state');
@@ -132,21 +122,37 @@ import RequestUtils from "../../../../utils/RequestUtils";
   }
 
 function status (a, b) {
-  if(moment(a, "HH:mm:ss").isAfter(moment("07:45:00"))){
-    return "Late!"
+  if(moment(a, "HH:mm A").isAfter(moment("7:45 AM", "HH:mm A"))){
+    return ["Late!"]
   }
   if(moment(b, "HH:mm:ss").isBefore(moment("02:45:00"))){
-    return "Left Early!"
+    return ["Left Early!"]
   }
   else {
-    return "Present"
+    return ['present']
   }
 
 }
 
+function to12Hr(a){
+  if((Number(a.substring(0,2)) > 12)){
+    return ((Number(a.substring(0,2)) - 12) + a.substring(2,5) + " PM")
+  }
+  if((Number(a.substring(0,2)) == 12)){
+    return (a.substring(0,5) + " PM")
+  }
+  else {
+    return a.substring(0,5) + " AM"
+  }
+}
+
 function signInMap() {
   let obj = {}
-
+  var options = {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true
+  };
   for(let i = 0; i < Object.keys(studentSignIns).length; i++) {
     if((Object.keys(obj).some(key => key == studentSignIns[i]["student_id"])) == false){
       obj[studentSignIns[i]["student_id"]] = {"date_recorded": studentSignIns[i]["date_recorded"], "time_records": [studentSignIns[i]["time_recorded"]]};
@@ -157,7 +163,7 @@ function signInMap() {
       console.log(studentSignIns[i]["student_id"].toString())
       let list = Array.from(obj[studentSignIns[i]["student_id"]]["time_records"]);
 
-      list.push(studentSignIns[i]["time_recorded"]);
+      list.push(studentSignIns[i]["time_recorded"].toLocaleString('en-US', options));
       obj[studentSignIns[i]["student_id"]]["time_records"] = list;
     }
 
@@ -168,30 +174,54 @@ function signInMap() {
 
 }
 
+function color(a){
+  if( a == "Requires Attention"){
+    return "#ad8b00"
+  }
+  if( a == "present"){
+    return "#237804"
+  }
+  if( a == "Late!"){
+    return "#a8071a"
+  }
+}
+
+function sortTimes(a,b){
+  if(a.enterTime == "N/A" && b.enterTime != "N/A"){
+    return moment("12:00 AM", 'HH:mm A').diff(moment(b.enterTime, 'HH:mm A'))
+  }
+  if(b.enterTime == "N/A" && a.enterTime != "N/A"){
+    return moment(a.enterTime, 'HH:mm A').diff(moment("12:00 AM", 'HH:mm A'))
+  }
+  if(a.enterTime == "N/A" && b.enterTime == "N/A"){
+    return moment("12:00 AM", 'HH:mm A').diff(moment("12:00 AM", 'HH:mm A'))
+  }
+  else {
+    return moment(a.enterTime, 'HH:mm A').diff(moment(b.enterTime, 'HH:mm A'))
+  }
+}
+
 function fill(obj) {
-  let studentLogs = []
-  let onTime = "Present";
-  let signInIDS = []
 
 
   console.log(Object.keys(studentVals).length)
 
-  let data = [{}]
+  let data = []
 
   for(let i = 0; i < Object.keys(studentVals).length; i++){
     console.log(Object.keys(obj))
     if(Object.keys(obj).some(key => key == (i+1))) {
       let end = "N/A"
       if(obj[i+1]["time_records"][obj[i+1]["time_records"].length-1] != obj[i+1]["time_records"][0]) {
-        end = obj[i+1]["time_records"][obj[i+1]["time_records"].length-1]
+        end = to12Hr(obj[i+1]["time_records"][obj[i+1]["time_records"].length-1])
       }
       data.push({
             key: (i+1).toString(),
             name: studentVals[i+1],
             studentId: i+1,
-            enterTime: obj[i+1]["time_records"][0],
+            enterTime: to12Hr(obj[i+1]["time_records"][0]),
             exitTime: end,
-            status: [onTime] 
+            tags: status(obj[i+1]["time_records"][0], end)
           })
     }
     else {
@@ -201,7 +231,7 @@ function fill(obj) {
         studentId: i+1,
         enterTime: "N/A",
         exitTime: "N/A",
-        status: ["N/A"]
+        tags: ['Requires Attention']
       })
     }
 
@@ -209,6 +239,15 @@ function fill(obj) {
   console.log(data);
   setMorningRecords(data);
 
+  let reqAttentionObj = [];
+
+  for(let i = 0; i < data.length; i++){
+    if(data[i]["tags"][0] == "Requires Attention" || data[i]["tags"][0] == "Late!"){
+      reqAttentionObj.push(data[i])
+    }
+  }
+
+  setWarningObj(reqAttentionObj);
  
 
   // goal: list students with sign in and sign out times and status
@@ -283,26 +322,37 @@ function fill(obj) {
         <Card.Title className="pt-3 pb-3">Attendance List</Card.Title>
         <Card.Subtitle>{moment.unix(params.date).format("MM/DD/YYYY")}</Card.Subtitle>
         <br></br>
-
-        <Table dataSource={morningRecords}>
-          
-          <Column title="Name" dataIndex="name" key="name" />
-          <Column title="Student ID" dataIndex="studentId" key="studentId" />
-          <Column title="Sign-in Time" dataIndex="enterTime" key="enterTime" />
-          <Column title="Sign-out Time" dataIndex="exitTime" key="exitTime" />
+        {console.log(morningRecords.length)}
+        
+      <ConfigProvider
+          theme={{
+            token: {
+              colorPrimary: '#01B093'
+            },
+          }}
+        >
+          <Tabs defaultActiveKey="1" onTabClick={console.log("yo")}>
+            <Tabs.TabPane tab="Requiring Attention" key="1">
+            <Table dataSource={Object.keys(warningObj).length > 2 ? warningObj : data}>
+        
+          <Column title="Name" dataIndex="name" key="name" sorter={(a, b) => (a.name).localeCompare(b.name)} width="25%"/>
+          <Column title="Student ID" dataIndex="studentId" key="studentId" sorter={(a, b) => a.studentId - b.studentId}/>
+          <Column title="Sign-in Time" dataIndex="enterTime" key="enterTime" sorter={(a, b) => sortTimes(a,b)}/>
+          <Column title="Sign-out Time" dataIndex="exitTime" key="exitTime" sorter={(a, b) => sortTimes(a,b)}/>
           <Column
           title="Status"
-          dataIndex="status"
-          key="status"
-          // render={(tags) => (
-          //   <>
-          //     {tags.map((tag) => (
-          //       <Tag color="blue" key={tag}>
-          //         {tag}
-          //       </Tag>
-          //     ))}
-          //   </>
-          // )}
+          dataIndex="tags"
+          key="tags"
+          sorter={(a, b) => (a.tags[0]).localeCompare(b.tags[0])}
+          render={(tag) => (<>
+       
+            <Tag color={color(tag)} key={"tags"}>
+              {tag}
+            </Tag>
+  
+        </>)
+            
+          }
         />
           {/* <Column title="Last Name" dataIndex="lastName" key="lastName" />
 
@@ -339,6 +389,70 @@ function fill(obj) {
     
       
       </Table>
+
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="All Students" key="2">
+            <Table dataSource={Object.keys(morningRecords).length > 20 ? morningRecords : data}>
+        {Object.keys(morningRecords).length > 20 ? console.log(morningRecords) : console.log(data)}
+          <Column title="Name" dataIndex="name" key="name" sorter={(a, b) => (a.name).localeCompare(b.name)} width="25%"/>
+          <Column title="Student ID" dataIndex="studentId" key="studentId" sorter={(a, b) => a.studentId - b.studentId}/>
+          <Column title="Sign-in Time" dataIndex="enterTime" key="enterTime" sorter={(a, b) => sortTimes(a,b)}/>
+          <Column title="Sign-out Time" dataIndex="exitTime" key="exitTime" sorter={(a, b) => sortTimes(a,b)}/>
+          <Column
+          title="Status"
+          dataIndex="tags"
+          key="tags"
+          sorter={(a, b) => (a.tags[0]).localeCompare(b.tags[0])}
+          render={(tag) => (<>
+       
+            <Tag color={color(tag)} key={"tags"}>
+              {tag}
+            </Tag>
+  
+        </>)
+            
+          }
+        />
+          {/* <Column title="Last Name" dataIndex="lastName" key="lastName" />
+
+        <Column title="Locker Number" dataIndex="locker" key="locker" />
+        
+        <Column
+          title="Status"
+          dataIndex="tags"
+          key="tags"
+          render={(tags) => (
+            <>
+              {tags.map((tag) => (
+                <Tag color="blue" key={tag}>
+                  {tag}
+                </Tag>
+              ))}
+            </>
+          )}
+        />
+        <Column
+          title="Status"
+          dataIndex="tags"
+          key="tags"
+          render={(tags) => (
+            <>
+              {tags.map((tag) => (
+                <Button color="blue" key={tag}>
+                  Adjust Record
+                </Button>
+              ))}
+            </>
+          )}
+        /> */}
+    
+      
+      </Table>
+            </Tabs.TabPane>
+
+
+          </Tabs>
+        </ConfigProvider>
       </div></>
     );
   }
